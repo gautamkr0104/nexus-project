@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS — Student Universe</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ============================================
+         SIDEBAR NAVIGATION
+         ============================================ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h1 class="logo">NEXUS</h1>
+            <span class="logo-sub">STUDENT UNIVERSE</span>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="nav-btn active" data-page="dashboard">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Dashboard</span>
+            </button>
+            <button class="nav-btn" data-page="missions">
+                <span class="nav-icon">🎯</span>
+                <span class="nav-label">Missions</span>
+            </button>
+            <button class="nav-btn" data-page="focus">
+                <span class="nav-icon">⏱️</span>
+                <span class="nav-label">Focus</span>
+            </button>
+            <button class="nav-btn" data-page="subjects">
+                <span class="nav-icon">📚</span>
+                <span class="nav-label">Subjects</span>
+            </button>
+            <button class="nav-btn" data-page="notes">
+                <span class="nav-icon">📝</span>
+                <span class="nav-label">Notes</span>
+            </button>
+            <button class="nav-btn" data-page="analytics">
+                <span class="nav-icon">📈</span>
+                <span class="nav-label">Analytics</span>
+            </button>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="nav-btn" id="settingsBtn">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-label">Settings</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Mobile top bar -->
+    <header class="mobile-header">
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">☰</button>
+        <span class="mobile-logo">NEXUS</span>
+        <div class="mobile-header-right">
+            <input type="text" class="search-box" id="searchInput" placeholder="Search missions & notes..." aria-label="Search">
+            <button class="theme-toggle" id="themeToggleMobile" aria-label="Toggle theme">🌙</button>
+        </div>
+    </header>
+
+    <!-- Mobile nav overlay -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+
+    <!-- ============================================
+         MAIN CONTENT
+         ============================================ -->
+    <main class="main-content" id="mainContent">
+
+        <!-- Top bar (desktop) -->
+        <div class="top-bar">
+            <input type="text" class="search-box" id="searchInputDesktop" placeholder="Search missions & notes..." aria-label="Search">
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+        </div>
+
+        <!-- ============================================
+             PAGE: DASHBOARD
+             ============================================ -->
+        <section class="page active" id="page-dashboard">
+            <!-- Name entry modal (first launch) -->
+            <div class="modal-overlay" id="nameModal">
+                <div class="modal">
+                    <h2>Welcome to NEXUS</h2>
+                    <p>What's your name, student?</p>
+                    <input type="text" id="nameInput" class="modal-input" placeholder="Enter your name" maxlength="30" aria-label="Your name">
+                    <button class="btn btn-primary" id="nameSubmit">Launch NEXUS</button>
+                </div>
+            </div>
+
+            <!-- Greeting header -->
+            <div class="greeting-card glass-card">
+                <div class="greeting-left">
+                    <h2 id="greetingText">Good evening, Student</h2>
+                    <p class="greeting-sub">Ready to level up your brain?</p>
+                    <p class="greeting-date" id="currentDate"></p>
+                </div>
+                <div class="avatar" id="avatar">S</div>
+            </div>
+
+            <!-- XP / Level bar -->
+            <div class="xp-bar-card glass-card">
+                <div class="xp-info">
+                    <span class="xp-level" id="xpLevel">LEVEL 1</span>
+                    <span class="xp-title" id="xpTitle">Curious Starter</span>
+                </div>
+                <div class="xp-progress-wrap">
+                    <div class="xp-progress-bar">
+                        <div class="xp-progress-fill" id="xpFill"></div>
+                    </div>
+                    <span class="xp-numbers" id="xpNumbers">0 / 100 XP</span>
+                </div>
+            </div>
+
+            <!-- Today's stats -->
+            <div class="stats-grid">
+                <div class="stat-card glass-card">
+                    <span class="stat-number" id="statMissions">0</span>
+                    <span class="stat-label">Missions</span>
+                </div>
+                <div class="stat-card glass-card">
+                    <span class="stat-number" id="statFocus">0</span>
+                    <span class="stat-label">Focus Min</span>
+                </div>
+                <div class="stat-card glass-card">
+                    <span class="stat-number" id="statStreak">🔥 0</span>
+                    <span class="stat-label">Streak</span>
+                </div>
+                <div class="stat-card glass-card">
+                    <span class="stat-number" id="statXP">+0</span>
+                    <span class="stat-label">XP Today</span>
+                </div>
+            </div>
+
+            <!-- Daily quote -->
+            <div class="quote-card glass-card">
+                <p class="quote-text" id="dailyQuote"></p>
+            </div>
+
+            <!-- Random knowledge -->
+            <div class="knowledge-card glass-card">
+                <h3>🧠 Random Knowledge</h3>
+                <p class="knowledge-text" id="randomFact"></p>
+                <button class="btn btn-small" id="newFactBtn">New Fact</button>
+            </div>
+
+            <!-- Quick mission list on dashboard -->
+            <div class="dash-missions glass-card">
+                <div class="flex-between">
+                    <h3>Active Missions</h3>
+                    <button class="btn btn-small" id="goToMissions">View All →</button>
+                </div>
+                <div id="dashMissionList" class="mission-list"></div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             PAGE: MISSIONS
+             ============================================ -->
+        <section class="page" id="page-missions">
+            <h1 class="page-title">🎯 Daily Missions</h1>
+
+            <!-- Add mission form -->
+            <div class="glass-card add-mission-form">
+                <h3>New Mission</h3>
+                <div class="form-row">
+                    <input type="text" id="missionTitle" class="form-input" placeholder="Mission title..." maxlength="100" aria-label="Mission title">
+                    <select id="missionSubject" class="form-select" aria-label="Subject">
+                        <option value="">Select subject</option>
+                    </select>
+                    <select id="missionDifficulty" class="form-select" aria-label="Difficulty">
+                        <option value="easy">Easy (20 XP)</option>
+                        <option value="medium" selected>Medium (40 XP)</option>
+                        <option value="hard">Hard (75 XP)</option>
+                    </select>
+                    <input type="number" id="missionMinutes" class="form-input" placeholder="Est. min" min="1" max="300" aria-label="Estimated minutes">
+                    <button class="btn btn-primary" id="addMissionBtn">Add Mission</button>
+                </div>
+            </div>
+
+            <!-- Filter buttons -->
+            <div class="filter-bar">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="active">Active</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+            </div>
+
+            <!-- Mission list -->
+            <div id="missionList" class="mission-list"></div>
+        </section>
+
+        <!-- ============================================
+             PAGE: FOCUS
+             ============================================ -->
+        <section class="page" id="page-focus">
+            <h1 class="page-title">⏱️ Focus Mode</h1>
+
+            <!-- Motivational quote -->
+            <p class="focus-quote glass-card" id="focusQuote"></p>
+
+            <!-- Timer -->
+            <div class="timer-container glass-card">
+                <div class="timer-circle">
+                    <svg class="timer-svg" viewBox="0 0 200 200">
+                        <defs>
+                            <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#a855f7"/>
+                                <stop offset="100%" stop-color="#06b6d4"/>
+                            </linearGradient>
+                        </defs>
+                        <circle class="timer-bg" cx="100" cy="100" r="90"></circle>
+                        <circle class="timer-progress" id="timerProgress" cx="100" cy="100" r="90"></circle>
+                    </svg>
+                    <div class="timer-display">
+                        <span class="timer-minutes" id="timerMinutes">25</span>
+                        <span class="timer-separator">:</span>
+                        <span class="timer-seconds" id="timerSeconds">00</span>
+                    </div>
+                </div>
+                <div class="timer-controls">
+                    <button class="btn btn-primary btn-large" id="timerStart">Start</button>
+                    <button class="btn btn-secondary btn-large" id="timerPause" disabled>Pause</button>
+                    <button class="btn btn-secondary btn-large" id="timerReset">Reset</button>
+                </div>
+                <div class="timer-settings">
+                    <label>Focus: <input type="number" id="focusDuration" class="form-input small" value="25" min="1" max="120"> min</label>
+                    <label>Break: <input type="number" id="breakDuration" class="form-input small" value="5" min="1" max="30"> min</label>
+                </div>
+            </div>
+
+            <!-- Focus session complete message -->
+            <div class="focus-complete glass-card hidden" id="focusComplete">
+                <h2>FOCUS SESSION COMPLETE! 🎉</h2>
+                <p id="focusCompleteText"></p>
+            </div>
+        </section>
+
+        <!-- ============================================
+             PAGE: SUBJECTS
+             ============================================ -->
+        <section class="page" id="page-subjects">
+            <h1 class="page-title">📚 Subjects</h1>
+
+            <!-- Add subject form -->
+            <div class="glass-card add-subject-form">
+                <h3>Add Subject</h3>
+                <div class="form-row">
+                    <input type="text" id="subjectName" class="form-input" placeholder="Subject name..." maxlength="40" aria-label="Subject name">
+                    <input type="text" id="subjectIcon" class="form-input small" placeholder="Emoji" maxlength="2" aria-label="Subject icon emoji">
+                    <button class="btn btn-primary" id="addSubjectBtn">Add</button>
+                </div>
+            </div>
+
+            <div id="subjectList" class="subject-grid"></div>
+        </section>
+
+        <!-- ============================================
+             PAGE: NOTES
+             ============================================ -->
+        <section class="page" id="page-notes">
+            <h1 class="page-title">📝 Notes</h1>
+
+            <!-- Add note form -->
+            <div class="glass-card add-note-form">
+                <h3 id="noteFormTitle">New Note</h3>
+                <input type="text" id="noteTitle" class="form-input" placeholder="Note title..." maxlength="100" aria-label="Note title">
+                <textarea id="noteContent" class="form-textarea" placeholder="Write something..." rows="6" aria-label="Note content"></textarea>
+                <div class="form-row">
+                    <button class="btn btn-primary" id="saveNoteBtn">Save Note</button>
+                    <button class="btn btn-secondary hidden" id="cancelEditBtn">Cancel</button>
+                </div>
+            </div>
+
+            <div id="noteList" class="note-grid"></div>
+        </section>
+
+        <!-- ============================================
+             PAGE: ANALYTICS
+             ============================================ -->
+        <section class="page" id="page-analytics">
+            <h1 class="page-title">📈 Analytics</h1>
+
+            <!-- Stats overview -->
+            <div class="stats-grid">
+                <div class="stat-card glass-card">
+                    <span class="stat-number" id="analyticsXP">0</span>
+                    <span class="stat-label">Total XP</span>
+                </div>
+                <div class="stat-card glass-card">
+                    <span class="stat-number" id="analyticsLevel">1</span>
+                    <span class="stat-label">Level</span>
+                </div>
+                <div class="stat-card glass-card">
+                    <span class="stat-number" id="analyticsStreak">0</span>
+                    <span class="stat-label">Best Streak</span>
+                </div>
+                <div class="stat-card glass-card">
+                    <span class="stat-number" id="analyticsMissions">0</span>
+                    <span class="stat-label">Missions Done</span>
+                </div>
+                <div class="stat-card glass-card">
+                    <span class="stat-number" id="analyticsFocus">0</span>
+                    <span class="stat-label">Focus Minutes</span>
+                </div>
+                <div class="stat-card glass-card">
+                    <span class="stat-number" id="analyticsNotes">0</span>
+                    <span class="stat-label">Notes</span>
+                </div>
+            </div>
+
+            <!-- Weekly activity chart -->
+            <div class="glass-card chart-card">
+                <h3>Weekly Activity</h3>
+                <div class="bar-chart" id="weeklyChart"></div>
+            </div>
+
+            <!-- Subject progress chart -->
+            <div class="glass-card chart-card">
+                <h3>Subject Progress</h3>
+                <div id="subjectChart" class="subject-chart"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============================================
+         SETTINGS MODAL
+         ============================================ -->
+    <div class="modal-overlay hidden" id="settingsModal">
+        <div class="modal modal-large">
+            <div class="flex-between">
+                <h2>⚙️ Settings</h2>
+                <button class="btn-close" id="closeSettings" aria-label="Close settings">&times;</button>
+            </div>
+            <div class="settings-group">
+                <label>Your Name</label>
+                <input type="text" id="settingsName" class="form-input" maxlength="30">
+            </div>
+            <div class="settings-group">
+                <label>Focus Duration (minutes)</label>
+                <input type="number" id="settingsFocus" class="form-input" min="1" max="120" value="25">
+            </div>
+            <div class="settings-group">
+                <label>Break Duration (minutes)</label>
+                <input type="number" id="settingsBreak" class="form-input" min="1" max="30" value="5">
+            </div>
+            <div class="settings-group">
+                <label>
+                    <input type="checkbox" id="settingsSound" checked>
+                    Sound Effects
+                </label>
+            </div>
+            <div class="settings-group">
+                <label>Theme</label>
+                <div class="form-row">
+                    <button class="btn btn-secondary" id="settingsDark">Dark</button>
+                    <button class="btn btn-secondary" id="settingsLight">Light</button>
+                </div>
+            </div>
+            <div class="settings-group">
+                <label>Data Management</label>
+                <div class="form-row">
+                    <button class="btn btn-secondary" id="exportDataBtn">📦 Export Data</button>
+                    <button class="btn btn-secondary" id="importDataBtn">📥 Import Data</button>
+                    <input type="file" id="importFileInput" accept=".json" class="hidden" aria-label="Import data file">
+                </div>
+            </div>
+            <div class="settings-group">
+                <button class="btn btn-danger" id="resetDataBtn">Reset All Data</button>
+                <p class="text-muted">This cannot be undone.</p>
+            </div>
+            <button class="btn btn-primary" id="saveSettingsBtn">Save Settings</button>
+        </div>
+    </div>
+
+    <!-- ============================================
+         CONFIRM MODAL
+         ============================================ -->
+    <div class="modal-overlay hidden" id="confirmModal">
+        <div class="modal">
+            <h3 id="confirmTitle">Are you sure?</h3>
+            <p id="confirmText">This action cannot be undone.</p>
+            <div class="form-row">
+                <button class="btn btn-danger" id="confirmYes">Yes, Reset</button>
+                <button class="btn btn-secondary" id="confirmNo">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         LEVEL UP OVERLAY
+         ============================================ -->
+    <div class="level-up-overlay hidden" id="levelUpOverlay">
+        <div class="level-up-content">
+            <h1 class="level-up-title">LEVEL UP!</h1>
+            <p class="level-up-sub" id="levelUpText">Your brain just got stronger.</p>
+            <p class="level-up-level" id="levelUpLevel"></p>
+        </div>
+        <div class="confetti" id="confetti"></div>
+    </div>
+
+    <!-- ============================================
+         TOAST CONTAINER
+         ============================================ -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Overlay for mobile sidebar -->
+    <div class="sidebar-overlay hidden" id="sidebarOverlay"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
